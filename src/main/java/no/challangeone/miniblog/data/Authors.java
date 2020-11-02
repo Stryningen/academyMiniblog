@@ -1,10 +1,9 @@
-package no.challangeone.miniblog;
+package no.challangeone.miniblog.data;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
-public class Comment {
+public class Authors {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -12,5 +11,4 @@ public class Comment {
     private User user;
     @ManyToOne
     private Article article;
-    private LocalDateTime createdDate;
 }
