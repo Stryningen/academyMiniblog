@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 @Entity
 public class Article {
@@ -12,7 +12,16 @@ public class Article {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String articleName;
-    private LocalDateTime createdDate;
+    private String articleBody;
+    private Timestamp createdDate;
+
+    public Article() {
+    }
+
+    public Article(String articleName, Timestamp createdDate) {
+        this.articleName = articleName;
+        this.createdDate = createdDate;
+    }
 
     public Integer getId() {
         return id;
@@ -30,11 +39,19 @@ public class Article {
         this.articleName = articleName;
     }
 
-    public LocalDateTime getCreatedDate() {
+    public String getArticleBody() {
+        return articleBody;
+    }
+
+    public void setArticleBody(String articleBody) {
+        this.articleBody = articleBody;
+    }
+
+    public Timestamp getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(LocalDateTime createdDate) {
+    public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
     }
 }
