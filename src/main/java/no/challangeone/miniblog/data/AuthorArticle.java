@@ -3,7 +3,7 @@ package no.challangeone.miniblog.data;
 import javax.persistence.*;
 
 @Entity
-public class Authors {
+public class AuthorArticle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -11,6 +11,14 @@ public class Authors {
     private User user;
     @ManyToOne
     private Article article;
+
+    public AuthorArticle() {
+    }
+
+    public AuthorArticle(User user, Article article) {
+        this.user = user;
+        this.article = article;
+    }
 
     public Integer getId() {
         return id;

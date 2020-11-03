@@ -16,7 +16,7 @@ CREATE TABLE miniblog.article
     created_date DATETIME
 );
 
-CREATE TABLE miniblog.authors
+CREATE TABLE miniblog.author_article
 (
     id         INTEGER AUTO_INCREMENT PRIMARY KEY,
     user_id    INTEGER,

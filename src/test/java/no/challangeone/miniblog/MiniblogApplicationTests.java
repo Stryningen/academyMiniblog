@@ -1,6 +1,7 @@
 package no.challangeone.miniblog;
 
 import no.challangeone.miniblog.data.Article;
+import no.challangeone.miniblog.data.AuthorArticle;
 import no.challangeone.miniblog.data.User;
 import no.challangeone.miniblog.repositories.DataService;
 import org.junit.jupiter.api.Test;
@@ -8,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,11 +29,11 @@ class MiniblogApplicationTests {
 
     @Test
     public void testUserRepository() {
-
-        if (dataService.findUserByName("test_user") != null) {
-            dataService.deleteUserByUserName("test_user");
+        User user = dataService.findUserByName("test_user");
+        if (user != null) {
+            dataService.deleteUser(user);
         }
-        User user = new User("test_user", "test@test.no", "1234");
+        user = new User("test_user", "test@test.no", "1234");
         dataService.saveUser(user);
 
         User userToCheck = dataService.findUserByName("test_user");
@@ -39,18 +43,19 @@ class MiniblogApplicationTests {
                 () -> assertEquals("1234", userToCheck.getPassword())
         );
 
-        dataService.deleteUserByUserName("test_user");
+        dataService.deleteUser(userToCheck);
         assertNull(dataService.findUserByName("test_user"));
 
     }
 
     @Test
     public void testArticleRepository() {
-        if (dataService.findArticleByArticleName("test_article") != null) {
-            dataService.deleteArticleByArticleName("test_article");
+        Article article = dataService.findArticleByArticleName("test_article");
+        if (article != null) {
+            dataService.deleteArticle(article);
         }
         Timestamp now = dataHandler.timestampNow();
-        Article article = new Article("test_article", now);
+        article = new Article("test_article", now);
         dataService.saveArticle(article);
 
         Article articleToCheck = dataService.findArticleByArticleName("test_article");
@@ -61,8 +66,66 @@ class MiniblogApplicationTests {
                 () -> assertEquals(now, articleToCheck.getCreatedDate())
         );
 
-        dataService.deleteArticleByArticleName("test_article");
+        dataService.deleteArticle(articleToCheck);
         assertNull(dataService.findArticleByArticleName("test_article"));
     }
+
+    @Test
+    public void testAuthorsRepository() {
+        List<User> listOfUsers = Arrays.asList(
+                new User("test1", "test1@test.no", "1234"),
+                new User("test2", "test2@test.no", "1234"),
+                new User("test3", "test3@test.no", "1234")
+        );
+
+        for (User user : listOfUsers) {
+            dataService.saveUser(user);
+        }
+
+        Timestamp now = dataHandler.timestampNow();
+
+        List<Article> listOfArticles = Arrays.asList(
+                new Article("test_article_1", now),
+                new Article("test_article_2", dataHandler.addDays(now, -1)),
+                new Article("test_article_3", dataHandler.addDays(now, -1)),
+                new Article("test_article_4", dataHandler.addDays(now, -2)),
+                new Article("test_article_5", dataHandler.addDays(now, -5))
+        );
+
+        for (int i = 0; i < listOfArticles.size(); i++) {
+            dataService.saveArticle(listOfArticles.get(i));
+            dataService.saveAuthor(new AuthorArticle(listOfUsers.get(0), listOfArticles.get(i)));
+        }
+        dataService.saveAuthor(new AuthorArticle(listOfUsers.get(1), listOfArticles.get(1)));
+        dataService.saveAuthor(new AuthorArticle(listOfUsers.get(1), listOfArticles.get(2)));
+        dataService.saveAuthor(new AuthorArticle(listOfUsers.get(2), listOfArticles.get(1)));
+        dataService.saveAuthor(new AuthorArticle(listOfUsers.get(2), listOfArticles.get(3)));
+
+        List<AuthorArticle> listOfAllAuthorArticles = new ArrayList<>();
+        for (Article article : listOfArticles) {
+            listOfAllAuthorArticles.addAll(dataService.findAuthorArticleByArticle(article));
+        }
+        assertEquals(9, listOfAllAuthorArticles.size());
+
+        assertEquals(1, dataService.findAuthorArticleByArticle(listOfArticles.get(0)).size());
+        assertEquals(3, dataService.findAuthorArticleByArticle(listOfArticles.get(1)).size());
+
+        assertEquals(5, dataService.findAuthorArticleByAuthor(listOfUsers.get(0)).size());
+        assertEquals(2, dataService.findAuthorArticleByAuthor(listOfUsers.get(2)).size());
+
+        Article deletedArticle = listOfArticles.get(0);
+        dataService.deleteArticle(deletedArticle);
+        assertEquals(0, dataService.findAuthorArticleByArticle(deletedArticle).size());
+
+        for (User user: listOfUsers){
+            dataService.deleteUser(user);
+            assertEquals(0, dataService.findAuthorArticleByAuthor(user).size());
+        }
+
+        for (Article article: listOfArticles){
+            dataService.deleteArticle(article);
+        }
+    }
+
 
 }

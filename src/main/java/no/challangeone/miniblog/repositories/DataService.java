@@ -1,23 +1,26 @@
 package no.challangeone.miniblog.repositories;
 
 import no.challangeone.miniblog.data.Article;
+import no.challangeone.miniblog.data.AuthorArticle;
 import no.challangeone.miniblog.data.User;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class DataService {
 
     private ArticleRepository articleRepository;
-    private AuthorsRepocitory authorsRepocitory;
+    private AuthorsArticleRepocitory authorsArticleRepocitory;
     private CommentRepository commentRepository;
     private UserRepository userRepository;
 
     public DataService(
-            ArticleRepository articleRepository, AuthorsRepocitory authorsRepocitory,
+            ArticleRepository articleRepository, AuthorsArticleRepocitory authorsArticleRepocitory,
             CommentRepository commentRepository, UserRepository userRepository
     ) {
         this.articleRepository = articleRepository;
-        this.authorsRepocitory = authorsRepocitory;
+        this.authorsArticleRepocitory = authorsArticleRepocitory;
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
     }
@@ -30,8 +33,7 @@ public class DataService {
         return userRepository.findByUserName(userName);
     }
 
-    public void deleteUserByUserName(String userName) {
-        User user = findUserByName(userName);
+    public void deleteUser(User user) {
         userRepository.delete(user);
     }
 
@@ -43,8 +45,19 @@ public class DataService {
         return articleRepository.save(article);
     }
 
-    public void deleteArticleByArticleName(String articleName) {
-        Article article = findArticleByArticleName(articleName);
+    public void deleteArticle(Article article) {
         articleRepository.delete(article);
+    }
+
+    public AuthorArticle saveAuthor(AuthorArticle authorArticle) {
+        return authorsArticleRepocitory.save(authorArticle);
+    }
+
+    public List<AuthorArticle> findAuthorArticleByArticle(Article article) {
+        return authorsArticleRepocitory.findByArticle(article);
+    }
+
+    public List<AuthorArticle> findAuthorArticleByAuthor(User user) {
+        return authorsArticleRepocitory.findByUser(user);
     }
 }
