@@ -74,6 +74,7 @@ class MiniblogApplicationTests {
     public void testAuthorsRepository() {
         List<User> listOfUsers = Arrays.asList(
                 new User("test1", "test1@test.no", "1234"),
+                new User("test1", "test1@test.no", "1234"),
                 new User("test2", "test2@test.no", "1234"),
                 new User("test3", "test3@test.no", "1234")
         );

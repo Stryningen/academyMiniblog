@@ -2,7 +2,9 @@ package no.challangeone.miniblog.data;
 
 import javax.persistence.*;
 
+
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "article_id"}))
 public class AuthorArticle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
