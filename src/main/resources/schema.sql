@@ -4,6 +4,7 @@ CREATE TABLE miniblog.user
 (
     id        INTEGER AUTO_INCREMENT PRIMARY KEY,
     user_name VARCHAR(50),
+    password VARCHAR(50),
     email     VARCHAR(50)
 );
 
