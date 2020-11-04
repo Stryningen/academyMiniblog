@@ -2,7 +2,9 @@ package no.challangeone.miniblog.repositories;
 
 import no.challangeone.miniblog.data.Article;
 import no.challangeone.miniblog.data.AuthorArticle;
+import no.challangeone.miniblog.data.Comment;
 import no.challangeone.miniblog.data.User;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,7 +51,7 @@ public class DataService {
         articleRepository.delete(article);
     }
 
-    public AuthorArticle saveAuthor(AuthorArticle authorArticle) {
+    public AuthorArticle saveAuthorArticle(AuthorArticle authorArticle) {
         return authorsArticleRepocitory.save(authorArticle);
     }
 
@@ -59,5 +61,26 @@ public class DataService {
 
     public List<AuthorArticle> findAuthorArticleByAuthor(User user) {
         return authorsArticleRepocitory.findByUser(user);
+    }
+
+    public User findUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    public List<Comment> findCommentsByArticle(Article article) {
+        return commentRepository.findByArticle(article);
+    }
+
+    public List<Comment> saveAllComments(List<Comment> comments){
+        return (List<Comment>) commentRepository.saveAll(comments);
+    }
+
+
+    public List<Comment> findCommentsByArticleAndAuthor(Article article, User user){
+        return authorsArticleRepocitory.findByArticleAndAuthor(article.getId(), user.getId());
+    }
+
+    public Comment saveComment(Comment comment) {
+        return commentRepository.save(comment);
     }
 }

@@ -1,7 +1,7 @@
 package no.challangeone.miniblog.data;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 @Entity
 public class Comment {
@@ -12,7 +12,18 @@ public class Comment {
     private User user;
     @ManyToOne
     private Article article;
-    private LocalDateTime createdDate;
+    private Timestamp createdDate;
+    private String comment;
+
+    public Comment() {
+    }
+
+    public Comment(User user, Article article, Timestamp createdDate, String comment) {
+        this.user = user;
+        this.article = article;
+        this.createdDate = createdDate;
+        this.comment = comment;
+    }
 
     public Integer getId() {
         return id;
@@ -38,11 +49,19 @@ public class Comment {
         this.article = article;
     }
 
-    public LocalDateTime getCreatedDate() {
+    public Timestamp getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(LocalDateTime createdDate) {
+    public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

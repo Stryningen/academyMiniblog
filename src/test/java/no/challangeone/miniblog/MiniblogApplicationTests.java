@@ -2,6 +2,7 @@ package no.challangeone.miniblog;
 
 import no.challangeone.miniblog.data.Article;
 import no.challangeone.miniblog.data.AuthorArticle;
+import no.challangeone.miniblog.data.Comment;
 import no.challangeone.miniblog.data.User;
 import no.challangeone.miniblog.repositories.DataService;
 import org.junit.jupiter.api.Test;
@@ -36,16 +37,23 @@ class MiniblogApplicationTests {
         user = new User("test_user", "test@test.no", "1234");
         dataService.saveUser(user);
 
-        User userToCheck = dataService.findUserByName("test_user");
-        assertAll("user",
-                () -> assertEquals("test_user", userToCheck.getUserName()),
-                () -> assertEquals("test@test.no", userToCheck.getEmail()),
-                () -> assertEquals("1234", userToCheck.getPassword())
+        User userToCheckName = dataService.findUserByName("test_user");
+        assertAll("user name:",
+                () -> assertEquals("test_user", userToCheckName.getUserName()),
+                () -> assertEquals("test@test.no", userToCheckName.getEmail()),
+                () -> assertEquals("1234", userToCheckName.getPassword())
         );
 
-        dataService.deleteUser(userToCheck);
-        assertNull(dataService.findUserByName("test_user"));
+        User userToCheckEmail = dataService.findUserByEmail("test@test.no");
+        assertAll("user email:",
+                () -> assertEquals("test_user", userToCheckEmail.getUserName()),
+                () -> assertEquals("test@test.no", userToCheckEmail.getEmail()),
+                () -> assertEquals("1234", userToCheckEmail.getPassword())
+        );
 
+        dataService.deleteUser(userToCheckName);
+        assertNull(dataService.findUserByName("test_user"));
+        assertNull(dataService.findUserByEmail("test@test.no"));
     }
 
     @Test
@@ -71,36 +79,34 @@ class MiniblogApplicationTests {
     }
 
     @Test
-    public void testAuthorsRepository() {
-        List<User> listOfUsers = Arrays.asList(
-                new User("test1", "test1@test.no", "1234"),
-                new User("test1", "test1@test.no", "1234"),
-                new User("test2", "test2@test.no", "1234"),
-                new User("test3", "test3@test.no", "1234")
-        );
-
-        for (User user : listOfUsers) {
-            dataService.saveUser(user);
+    public void testAuthorArticleRepository() {
+        List<User> listOfUsers = new ArrayList<>();
+        for (int i = 1; i <= 3; i++) {
+            User user = dataService.findUserByName("test"+i);
+            if (user != null){
+                dataService.deleteUser(user);
+            }
+          listOfUsers.add(new User("test"+i, "test"+i+"@test.no", "1234"));
+            dataService.saveUser(listOfUsers.get(i-1));
         }
 
         Timestamp now = dataHandler.timestampNow();
-
-        List<Article> listOfArticles = Arrays.asList(
-                new Article("test_article_1", now),
-                new Article("test_article_2", dataHandler.addDays(now, -1)),
-                new Article("test_article_3", dataHandler.addDays(now, -1)),
-                new Article("test_article_4", dataHandler.addDays(now, -2)),
-                new Article("test_article_5", dataHandler.addDays(now, -5))
-        );
-
-        for (int i = 0; i < listOfArticles.size(); i++) {
-            dataService.saveArticle(listOfArticles.get(i));
-            dataService.saveAuthor(new AuthorArticle(listOfUsers.get(0), listOfArticles.get(i)));
+        List<Article> listOfArticles = new ArrayList<>();
+        for (int i = 1; i <= 5; i++) {
+            Article article = dataService.findArticleByArticleName("test_article_"+i);
+            if (article != null){
+                dataService.deleteArticle(article);
+            }
+            listOfArticles.add(new Article("test_article_"+i, dataHandler.addDays(now, -i)));
+            dataService.saveArticle(listOfArticles.get(i-1));
+            dataService.saveAuthorArticle(new AuthorArticle(listOfUsers.get(0), listOfArticles.get(i-1)));
         }
-        dataService.saveAuthor(new AuthorArticle(listOfUsers.get(1), listOfArticles.get(1)));
-        dataService.saveAuthor(new AuthorArticle(listOfUsers.get(1), listOfArticles.get(2)));
-        dataService.saveAuthor(new AuthorArticle(listOfUsers.get(2), listOfArticles.get(1)));
-        dataService.saveAuthor(new AuthorArticle(listOfUsers.get(2), listOfArticles.get(3)));
+
+        //Would be deleted by ON DELETE CASCADE
+        dataService.saveAuthorArticle(new AuthorArticle(listOfUsers.get(1), listOfArticles.get(1)));
+        dataService.saveAuthorArticle(new AuthorArticle(listOfUsers.get(1), listOfArticles.get(2)));
+        dataService.saveAuthorArticle(new AuthorArticle(listOfUsers.get(2), listOfArticles.get(1)));
+        dataService.saveAuthorArticle(new AuthorArticle(listOfUsers.get(2), listOfArticles.get(3)));
 
         List<AuthorArticle> listOfAllAuthorArticles = new ArrayList<>();
         for (Article article : listOfArticles) {
@@ -118,11 +124,70 @@ class MiniblogApplicationTests {
         dataService.deleteArticle(deletedArticle);
         assertEquals(0, dataService.findAuthorArticleByArticle(deletedArticle).size());
 
-        for (User user: listOfUsers){
+        for (User user : listOfUsers) {
             dataService.deleteUser(user);
             assertEquals(0, dataService.findAuthorArticleByAuthor(user).size());
         }
 
+        for (Article article : listOfArticles) {
+            dataService.deleteArticle(article);
+        }
+    }
+
+    @Test
+    public void testCommentRepository() {
+        List<User> listOfUsers = new ArrayList<>();
+        for (int i = 1; i <= 3; i++) {
+            User user = dataService.findUserByName("test"+i);
+            if (user != null){
+                dataService.deleteUser(user);
+            }
+            listOfUsers.add(new User("test"+i, "test"+i+"@test.no", "1234"));
+            dataService.saveUser(listOfUsers.get(i-1));
+        }
+
+        Timestamp now = dataHandler.timestampNow();
+        List<Article> listOfArticles = new ArrayList<>();
+        for (int i = 1; i <= 2; i++) {
+            Article article = dataService.findArticleByArticleName("test_article_"+i);
+            if (article != null){
+                dataService.deleteArticle(article);
+            }
+            listOfArticles.add(new Article("test_article_"+i, dataHandler.addDays(now, -i)));
+            dataService.saveArticle(listOfArticles.get(i-1));
+            dataService.saveAuthorArticle(new AuthorArticle(listOfUsers.get(0), listOfArticles.get(i-1)));
+        }
+
+        List<Comment> listOfComments = new ArrayList<>();
+        String comment = "This is a comment! 4488";
+        for (User user : listOfUsers) {
+            listOfComments.addAll(
+                    Arrays.asList(
+                            new Comment(user, listOfArticles.get(0), now, comment),
+                            new Comment(user, listOfArticles.get(1), now, comment)
+                    )
+            );
+        }
+        comment = "Changed it because I can! 3399";
+        listOfComments.addAll(
+                Arrays.asList(
+                        new Comment(listOfUsers.get(0), listOfArticles.get(0), now, comment),
+                        new Comment(listOfUsers.get(1), listOfArticles.get(0), now, comment),
+                        new Comment(listOfUsers.get(1), listOfArticles.get(0), now, comment),
+                        new Comment(listOfUsers.get(2), listOfArticles.get(1), now, comment)
+                )
+        );
+
+        dataService.saveAllComments(listOfComments);
+
+        assertEquals(6, dataService.findCommentsByArticle(listOfArticles.get(0)).size());
+        assertEquals(4, dataService.findCommentsByArticle(listOfArticles.get(1)).size());
+        assertEquals(2, dataService.findCommentsByArticleAndAuthor(listOfArticles.get(1),listOfUsers.get(2)).size());
+        assertEquals(3, dataService.findCommentsByArticleAndAuthor(listOfArticles.get(0),listOfUsers.get(1)).size());
+
+        for (User user: listOfUsers){
+            dataService.deleteUser(user);
+        }
         for (Article article: listOfArticles){
             dataService.deleteArticle(article);
         }
