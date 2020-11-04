@@ -176,13 +176,18 @@ class MiniblogApplicationTests {
                         new Comment(listOfUsers.get(2), listOfArticles.get(1), now, comment)
                 )
         );
-
         dataService.saveAllComments(listOfComments);
 
         assertEquals(6, dataService.findCommentsByArticle(listOfArticles.get(0)).size());
         assertEquals(4, dataService.findCommentsByArticle(listOfArticles.get(1)).size());
         assertEquals(2, dataService.findCommentsByArticleAndAuthor(listOfArticles.get(1),listOfUsers.get(2)).size());
         assertEquals(3, dataService.findCommentsByArticleAndAuthor(listOfArticles.get(0),listOfUsers.get(1)).size());
+
+        AuthorArticle authArtSpecific = dataService.findAuthorArticleByAuthorAndArticle(listOfUsers.get(0), listOfArticles.get(0));
+        assertAll("Test specific author:",
+                () -> assertEquals(listOfUsers.get(0).getId(), authArtSpecific.getUser().getId()),
+                () -> assertEquals(listOfArticles.get(0).getId(), authArtSpecific.getArticle().getId())
+                );
 
         for (User user: listOfUsers){
             dataService.deleteUser(user);

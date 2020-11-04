@@ -31,7 +31,7 @@ CREATE TABLE miniblog.comment
     id           INTEGER AUTO_INCREMENT PRIMARY KEY,
     user_id      INTEGER,
     article_id   INTEGER,
-    comment      VARCHAR(250),
+    comment      VARCHAR(500),
     created_date DATETIME,
     FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE,
     FOREIGN KEY (article_id) REFERENCES article (id) ON DELETE CASCADE

@@ -21,4 +21,6 @@ public interface AuthorsArticleRepocitory extends CrudRepository<AuthorArticle, 
             "WHERE c.article.id = ?1 " +
             "AND c.user.id =?2")
     List<Comment> findByArticleAndAuthor(Integer articleId, Integer userId);
+
+    AuthorArticle findByUserAndArticle(User user, Article article);
 }

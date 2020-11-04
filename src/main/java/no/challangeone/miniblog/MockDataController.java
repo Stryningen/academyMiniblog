@@ -2,13 +2,14 @@ package no.challangeone.miniblog;
 
 import com.github.javafaker.Faker;
 import no.challangeone.miniblog.data.Article;
+import no.challangeone.miniblog.data.AuthorArticle;
+import no.challangeone.miniblog.data.Comment;
 import no.challangeone.miniblog.data.User;
 import no.challangeone.miniblog.repositories.DataService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -28,47 +29,107 @@ public class MockDataController {
     @GetMapping("/mock/init")
     public String initMockData() {
         String reply = "";
-        if(dataService.findAllUsers().size() < 25){
-            List<User> users = setUpUsers();
+        if (dataService.findAllUsers().size() < 25) {
+            setUpUsers();
             reply += "users: added,";
         } else {
             reply += "users: already populated,";
         }
 
-        if (dataService.findAllArticles().size() < 50){
-            List<Article> articles = setUpArticles();
+        if (dataService.findAllArticles().size() < 50) {
+            setUpArticles();
             reply += "\narticles: added,";
         } else {
             reply += "\narticles: already populated,";
         }
 
+        if (dataService.findAllAuthorArticles().size() < 50) {
+            setUpAuthors();
+            reply += "\nauthors: added,";
+        } else {
+            reply += "\nauthors: already populated,";
+        }
+
+        if(dataService.findAllComments().size() < 500){
+            setUpComments();
+            reply += "\ncomments: added,";
+        } else {
+            reply += "\ncomments: already populated,";
+        }
+
+
         return reply;
     }
 
-    private List<Article> setUpArticles() {
-        List<Article> articles = new ArrayList<>();
+    private void setUpComments() {
+        List<Article> articles = dataService.findAllArticles();
+        List<User> users = dataService.findAllUsers();
+        Timestamp now = dataHandler.timestampNow();
+        User randomUser = null;
+        Comment comment;
+        String message;
+
+        for (Article article : articles) {
+            if (dataService.findCommentsByArticle(article).size() <= 20) {
+                for (int i = 0; i < faker.random().nextInt(0, 20); i++) {
+                    randomUser = users.get(faker.random().nextInt(0, users.size() - 1));
+                    message = faker.backToTheFuture().quote();
+                    comment = new Comment(
+                            randomUser, article,
+                            dataHandler.addDays(now, -faker.random().nextInt(0, 30)),
+                            message
+                    );
+                    dataService.saveComment(comment);
+                }
+            }
+        }
+    }
+
+    private void setUpAuthors() {
+        List<Article> articles = dataService.findAllArticles();
+        List<User> users = dataService.findAllUsers();
+
+        for (Article article : articles) {
+            User randomUser;
+            AuthorArticle authArt;
+            for (int i = 0; i < faker.random().nextInt(1, 3); i++) {
+                randomUser = users.get(faker.random().nextInt(0, users.size() - 1));
+                authArt = dataService.findAuthorArticleByAuthorAndArticle(randomUser, article);
+                if (authArt != null) {
+                    dataService.deleteAuthor(authArt);
+                }
+                authArt = new AuthorArticle(randomUser, article);
+                dataService.saveAuthorArticle(authArt);
+            }
+        }
+    }
+
+    private void setUpArticles() {
         String articleName;
         Article article;
         Timestamp now = dataHandler.timestampNow();
-        for (int i = 0; i < 50; i++){
+        for (int i = 0; i < 50; i++) {
             articleName = faker.animal().name();
             article = dataService.findArticleByArticleName(articleName);
-            if (article != null){
+            if (article != null) {
                 dataService.deleteArticle(article);
             }
             article = new Article(
                     articleName,
                     dataHandler.addDays(now, -(faker.random().nextInt(0, 30)))
             );
-            articles.add(article);
+            article.setArticleBody("<p>" +
+                    String.join("</p><p>",
+                            faker.lorem().paragraphs(faker.random().nextInt(1, 7))
+                    )
+                    + "</p>"
+            );
             dataService.saveArticle(article);
         }
-        return articles;
     }
 
-    private List<User> setUpUsers() {
+    private void setUpUsers() {
 
-        List<User> users = new ArrayList<>();
         String userName;
         User user;
         for (int i = 0; i < 25; i++) {
@@ -82,10 +143,7 @@ public class MockDataController {
                     faker.pokemon().name() + "@" + faker.space().star(),
                     "1234"
             );
-            users.add(user);
             dataService.saveUser(user);
         }
-
-        return users;
     }
 }

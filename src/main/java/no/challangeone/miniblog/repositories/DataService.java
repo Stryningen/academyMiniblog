@@ -4,7 +4,6 @@ import no.challangeone.miniblog.data.Article;
 import no.challangeone.miniblog.data.AuthorArticle;
 import no.challangeone.miniblog.data.Comment;
 import no.challangeone.miniblog.data.User;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -91,5 +90,21 @@ public class DataService {
 
     public List<Article> findAllArticles() {
         return (List<Article>) articleRepository.findAll();
+    }
+
+    public AuthorArticle findAuthorArticleByAuthorAndArticle(User user, Article article) {
+        return authorsArticleRepocitory.findByUserAndArticle(user, article);
+    }
+
+    public void deleteAuthor(AuthorArticle authArt) {
+        authorsArticleRepocitory.delete(authArt);
+    }
+
+    public List<AuthorArticle> findAllAuthorArticles() {
+        return (List<AuthorArticle>) authorsArticleRepocitory.findAll();
+    }
+
+    public List<Comment> findAllComments() {
+        return (List<Comment>) commentRepository.findAll();
     }
 }
