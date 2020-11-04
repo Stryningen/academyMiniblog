@@ -7,6 +7,7 @@ import no.challangeone.miniblog.data.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -82,5 +83,13 @@ public class DataService {
 
     public Comment saveComment(Comment comment) {
         return commentRepository.save(comment);
+    }
+
+    public List<User> findAllUsers() {
+        return (List<User>) userRepository.findAll();
+    }
+
+    public List<Article> findAllArticles() {
+        return (List<Article>) articleRepository.findAll();
     }
 }

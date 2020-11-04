@@ -102,7 +102,6 @@ class MiniblogApplicationTests {
             dataService.saveAuthorArticle(new AuthorArticle(listOfUsers.get(0), listOfArticles.get(i-1)));
         }
 
-        //Would be deleted by ON DELETE CASCADE
         dataService.saveAuthorArticle(new AuthorArticle(listOfUsers.get(1), listOfArticles.get(1)));
         dataService.saveAuthorArticle(new AuthorArticle(listOfUsers.get(1), listOfArticles.get(2)));
         dataService.saveAuthorArticle(new AuthorArticle(listOfUsers.get(2), listOfArticles.get(1)));
