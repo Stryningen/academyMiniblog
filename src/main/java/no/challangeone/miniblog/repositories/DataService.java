@@ -115,4 +115,11 @@ public class DataService {
     public List<User> findAuthorsByArticle(Article article) {
         return userRepository.findByArticle(article.getId());
     }
+
+    public boolean checkIfArticleExists(Integer articleId) {
+        if (articleRepository.findById(articleId).isPresent()){
+            return true;
+        }
+        return false;
+    }
 }

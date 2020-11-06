@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+	<div th:replace="fragments/template :: head"></div>
+	<link rel="stylesheet" th:href="@{/css/articleForm.css}">
+	<title>Create Article</title>
+    </head>
+    <body>
+	<header th:replace="fragments/template :: header"></header>
+	<main>
+	    <form id="article-form" th:action="@{/saveArticle}" method="post" th:object="${article}">
+		<h1>Create Article</h1>
+		<div>
+		    <p style="color:red" th:if="${#fields.hasErrors('articleName')}">Can not be empty</p>
+		    <label for="articleName">Article Name:</label>
+		    <br>
+		    <input type="text" th:field="*{articleName}">
+		</div>
+		<div><p style="color:red" th:if="${#fields.hasErrors('articleBody')}">Can not be empty</p>
+		    <label for="articleBody">Article</label>
+		    <br>
+		    <textarea id="article-body" th:field="*{articleBody}" cols="90" rows="20"></textarea>
+		</div>
+		<input type="submit" id="submit-button" value="Save Article">
+		<input type="hidden" th:field="*{id}">
+	    </form>
+	</main>
+	<footer th:replace="fragments/template :: footer"></footer>
+    </body>
+</html>

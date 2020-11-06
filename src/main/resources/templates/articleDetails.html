@@ -8,6 +8,10 @@
     <body>
 	<header th:replace="fragments/template :: header"></header>
 	<main>
+	    <form th:if="${author}" th:action="@{'/delete/article/' + ${article.id}}" id="edit-form">
+		<input type="submit" class="button" value="delete">
+		<a th:href="@{'/editArticle/' + ${article.id}}" class="link button">edit</a>
+	    </form>
 	    <h1 th:text="${article.articleName}">Article name</h1>
 	    <section id="article-authors">
 		<h3>Authers:</h3>

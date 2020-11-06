@@ -1,6 +1,7 @@
 package no.challangeone.miniblog.data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.sql.Timestamp;
 
 @Entity
@@ -8,7 +9,9 @@ public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @NotEmpty
     private String articleName;
+    @NotEmpty
     private String articleBody;
     private Timestamp createdDate;
 

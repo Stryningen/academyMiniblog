@@ -13,7 +13,10 @@
 	<header th:fragment="header" id="header">
 	    <a class="link header-link" th:href="@{/}">List of Articles</a>
 	    <a class="link header-link" th:href="@{/createArticle}">Ceate Article</a>
-	    <a class="link header-link" th:href="@{/login}">Login</a>
+	    <a th:unless="${loggedIn}" class="link header-link" th:href="@{/login}">Login</a>
+	    <form th:if="${loggedIn}" th:action="@{/logout}" method="post">
+		<input class="header-link" id="logout-button" type="submit" value="Logout">
+	    </form>
 	</header>
 	<footer th:fragment="footer">
 	    <script type="text/javascript" th:src="@{/js/header.js}"></script>

@@ -37,7 +37,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/css/*", "/js/*", "/mock/init").permitAll()
                 .anyRequest().authenticated()
                 .and().formLogin().defaultSuccessUrl("/", true)
-                .and().formLogin().loginPage("/login").permitAll();
+                .and().formLogin().loginPage("/login").permitAll()
+                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/");
     }
 
     @Override
