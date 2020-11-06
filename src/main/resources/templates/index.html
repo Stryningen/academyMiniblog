@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+	<div th:replace="fragments/template :: head"></div>
+	<link rel="stylesheet" th:href="@{/css/index.css}">
+	<title>Miniblog: Articles</title>
+    </head>
+    <body>
+	<header th:replace="fragments/template :: header"></header>
+	<main>
+	    <h1>Articles</h1>
+	    <div id="articles-list">
+		<div th:if="${articles}" th:each="article : ${articles}" class="article-item">
+		    <a 
+									 th:href="@{'/article/' + ${article.id} + '/details'}" 
+									 th:text="${article.articleName}"
+									 class="link article-link">
+		    </a>
+		</div>
+	    </div>
+	</main>
+	<footer th:replace="fragments/template :: footer"></footer>
+    </body>
+</html>

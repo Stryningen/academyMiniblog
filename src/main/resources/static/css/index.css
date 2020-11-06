@@ -1,0 +1,18 @@
+#articles-list{
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.article-item{
+    margin-top: 1em;
+    min-width: calc(100%/3);
+}
+
+.article-item{
+    text-align: center;
+}
+
+.article-link{
+    color: black;
+}

@@ -12,7 +12,7 @@ CREATE TABLE miniblog.article
 (
     id           INTEGER AUTO_INCREMENT PRIMARY KEY,
     article_name VARCHAR(50) UNIQUE,
-    article_body VARCHAR(2000),
+    article_body TEXT,
     created_date DATETIME
 );
 

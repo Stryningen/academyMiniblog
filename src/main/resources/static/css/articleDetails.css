@@ -1,0 +1,23 @@
+#article-authors > ul{
+    list-style: none;
+    display: flex;
+    flex-flow: wrap;
+}
+
+#article-authors{
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 1em;
+    padding: 1em;
+}
+
+#article-authors > ul{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    width: 50%;
+    font-style: italic;
+    margin-top: 1em;
+}

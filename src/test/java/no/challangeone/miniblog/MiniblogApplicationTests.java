@@ -115,6 +115,7 @@ class MiniblogApplicationTests {
 
         assertEquals(1, dataService.findAuthorArticleByArticle(listOfArticles.get(0)).size());
         assertEquals(3, dataService.findAuthorArticleByArticle(listOfArticles.get(1)).size());
+        assertEquals(3, dataService.findAuthorsByArticle(listOfArticles.get(1)).size());
 
         assertEquals(5, dataService.findAuthorArticleByAuthor(listOfUsers.get(0)).size());
         assertEquals(2, dataService.findAuthorArticleByAuthor(listOfUsers.get(2)).size());

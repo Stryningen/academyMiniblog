@@ -118,11 +118,10 @@ public class MockDataController {
                     articleName,
                     dataHandler.addDays(now, -(faker.random().nextInt(0, 30)))
             );
-            article.setArticleBody("<p>" +
-                    String.join("</p><p>",
-                            faker.lorem().paragraphs(faker.random().nextInt(1, 7))
+            article.setArticleBody(
+                    String.join(" ",
+                            faker.lorem().paragraphs(faker.random().nextInt(50, 150))
                     )
-                    + "</p>"
             );
             dataService.saveArticle(article);
         }

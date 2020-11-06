@@ -2,7 +2,6 @@ package no.challangeone.miniblog.data;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.List;
 
 @Entity
 public class Article {

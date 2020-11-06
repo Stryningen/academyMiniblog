@@ -1,0 +1,38 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header{
+    height: 10vh;
+    background-color: lightblue;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+}
+
+.sticky{
+    position: fixed;
+    top: 0;
+}
+
+.header-link{
+    color: white;
+}
+
+main{
+    margin: 1em 0;
+    padding: 0 10vw;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+.link {
+    text-decoration: none;
+}
+
+

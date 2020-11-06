@@ -107,4 +107,12 @@ public class DataService {
     public List<Comment> findAllComments() {
         return (List<Comment>) commentRepository.findAll();
     }
+
+    public Article findArticleById(Integer id) {
+        return articleRepository.findById(id).get();
+    }
+
+    public List<User> findAuthorsByArticle(Article article) {
+        return userRepository.findByArticle(article.getId());
+    }
 }
