@@ -4,9 +4,11 @@ import no.challangeone.miniblog.data.Article;
 import no.challangeone.miniblog.data.AuthorArticle;
 import no.challangeone.miniblog.data.User;
 import no.challangeone.miniblog.repositories.DataService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,10 +23,14 @@ public class MiniblogController {
 
     DataService dataService;
     DataHandler dataHandler;
+    PasswordEncoder encoder;
 
-    public MiniblogController(DataService dataService, DataHandler dataHandler) {
+    public MiniblogController(DataService dataService, DataHandler dataHandler,
+                              PasswordEncoder encoder
+                              ) {
         this.dataService = dataService;
         this.dataHandler = dataHandler;
+        this.encoder = encoder;
     }
 
     @GetMapping("/")
@@ -34,6 +40,31 @@ public class MiniblogController {
         List<Article> articles = dataService.findAllArticles();
         model.addAttribute("articles", articles);
         return "index";
+    }
+
+    @GetMapping("/register")
+    public String registerUser(Model model, Principal principal){
+        if (checkIfLoggedIn(model, principal)){
+            return "redirect:/";
+        }
+        User user = new User();
+        model.addAttribute("user", user);
+        return "registrationForm";
+    }
+
+    @PostMapping("/register")
+    public String registerUser(@ModelAttribute @Valid User user, BindingResult br){
+        if(!br.hasErrors() && dataService.checkIfUserExist(user)){
+            ObjectError error = new ObjectError("user_exists", "user already exists");
+            br.addError(error);
+        }
+        if(br.hasErrors()){
+            return "registrationForm";
+        }
+        user.setPassword(encoder.encode(user.getPassword()));
+        dataService.saveUser(user);
+
+        return "redirect:/login";
     }
 
 

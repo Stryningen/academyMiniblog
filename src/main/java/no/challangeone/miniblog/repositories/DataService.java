@@ -122,4 +122,11 @@ public class DataService {
         }
         return false;
     }
+
+    public boolean checkIfUserExist(User user) {
+        if (userRepository.findByUserName(user.getUserName()) != null){
+            return true;
+        }
+        return false;
+    }
 }

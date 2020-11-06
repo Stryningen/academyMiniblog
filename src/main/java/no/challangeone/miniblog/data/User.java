@@ -1,14 +1,17 @@
 package no.challangeone.miniblog.data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @NotEmpty
     private String userName;
     private String email;
+    @NotEmpty
     private String password;
 
     public User() {
