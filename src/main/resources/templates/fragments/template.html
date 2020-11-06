@@ -11,9 +11,9 @@
     </head>
     <body>
 	<header th:fragment="header" id="header">
-	    <a class="link header-link" href="">List of Articles</a>
-	    <a class="link header-link" href="">Ceate Article</a>
-	    <a class="link header-link" href="">Login</a>
+	    <a class="link header-link" th:href="@{/}">List of Articles</a>
+	    <a class="link header-link" th:href="@{/createArticle}">Ceate Article</a>
+	    <a class="link header-link" th:href="@{/login}">Login</a>
 	</header>
 	<footer th:fragment="footer">
 	    <script type="text/javascript" th:src="@{/js/header.js}"></script>

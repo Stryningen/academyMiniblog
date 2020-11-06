@@ -37,4 +37,9 @@ public class MiniblogController {
 
         return "articleDetails";
     }
+
+    @GetMapping("/login")
+    public String login(){
+        return "login";
+    }
 }

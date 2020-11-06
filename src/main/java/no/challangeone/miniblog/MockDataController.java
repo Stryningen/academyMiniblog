@@ -6,6 +6,7 @@ import no.challangeone.miniblog.data.AuthorArticle;
 import no.challangeone.miniblog.data.Comment;
 import no.challangeone.miniblog.data.User;
 import no.challangeone.miniblog.repositories.DataService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,11 +19,13 @@ public class MockDataController {
 
     DataService dataService;
     DataHandler dataHandler;
+    PasswordEncoder encoder;
     Faker faker;
 
-    public MockDataController(DataService dataService, DataHandler dataHandler) {
+    public MockDataController(DataService dataService, DataHandler dataHandler, PasswordEncoder encoder) {
         this.dataService = dataService;
         this.dataHandler = dataHandler;
+        this.encoder = encoder;
         this.faker = new Faker();
     }
 
@@ -140,7 +143,7 @@ public class MockDataController {
             user = new User(
                     userName,
                     faker.pokemon().name() + "@" + faker.space().star(),
-                    "1234"
+                    encoder.encode("1234")
             );
             dataService.saveUser(user);
         }

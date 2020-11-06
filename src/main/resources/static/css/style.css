@@ -4,9 +4,13 @@
     box-sizing: border-box;
 }
 
+body{
+    font-family: 'Ubuntu Mono', monospace;
+}
+
 header{
     height: 10vh;
-    background-color: lightblue;
+    background-color: dodgerblue;
     width: 100%;
     display: flex;
     justify-content: space-around;
@@ -24,8 +28,8 @@ header{
 }
 
 main{
-    margin: 1em 0;
-    padding: 0 10vw;
+    min-height: 90vh;
+    padding: 1em 10vw;
     display: flex;
     flex-flow: column;
     align-items: center;
