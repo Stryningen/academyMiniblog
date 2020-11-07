@@ -129,4 +129,19 @@ public class DataService {
         }
         return false;
     }
+
+    public boolean checkIfUserEmailExist(User user) {
+        if (user.getEmail() != null && userRepository.findByEmail(user.getEmail()) != null){
+            return true;
+        }
+        return false;
+    }
+
+    public void deleteComment(Comment comment) {
+        commentRepository.delete(comment);
+    }
+
+    public Comment findCommentById(Integer commentId) {
+        return commentRepository.findById(commentId).get();
+    }
 }

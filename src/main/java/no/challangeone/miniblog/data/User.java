@@ -10,6 +10,7 @@ public class User {
     private Integer id;
     @NotEmpty
     private String userName;
+    @NotEmpty
     private String email;
     @NotEmpty
     private String password;

@@ -4,7 +4,7 @@ CREATE TABLE miniblog.user
 (
     id        INTEGER AUTO_INCREMENT PRIMARY KEY,
     user_name VARCHAR(50) UNIQUE,
-    password VARCHAR(500),
+    password  VARCHAR(500),
     email     VARCHAR(50) UNIQUE
 );
 
@@ -23,7 +23,7 @@ CREATE TABLE miniblog.author_article
     article_id INTEGER,
     FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE,
     FOREIGN KEY (article_id) REFERENCES article (id) ON DELETE CASCADE,
-    UNIQUE unique_index(user_id, article_id)
+    UNIQUE unique_index (user_id, article_id)
 );
 
 CREATE TABLE miniblog.comment
@@ -31,7 +31,7 @@ CREATE TABLE miniblog.comment
     id           INTEGER AUTO_INCREMENT PRIMARY KEY,
     user_id      INTEGER,
     article_id   INTEGER,
-    comment      VARCHAR(500),
+    comment_body VARCHAR(500),
     created_date DATETIME,
     FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE,
     FOREIGN KEY (article_id) REFERENCES article (id) ON DELETE CASCADE

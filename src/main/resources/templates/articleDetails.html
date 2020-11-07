@@ -20,6 +20,28 @@
 		</ul>
 	    </section>
 	    <section id="article-body"><p th:text="${article.articleBody}"></p></section>
+	    <section id="comments">
+		<h3>Comments</h3>
+		<form class="comment" id="comment-form" th:action="@{'/postComment/' + ${article.id}}" method="post" th:object="${newComment}">
+		    <h4>Post Your Comment:</h4>
+		    <textarea id="new-comment" th:field="*{commentBody}" rows="10"></textarea>
+		    <input class="button" type="submit" value="Post Comment">
+		    <input type="hidden" th:field=*{id}>
+		</form>
+		<div th:each="comment : ${comments}" class="comment">
+		    <div>
+			<span th:text="${comment.user.userName}">Name of commentor</span>
+			<span th:text="${comment.createdDate}" id="timestamp">Timestamp</span>
+		    </div>
+		    <p th:text="${comment.commentBody}">comment</p>
+		    <div>
+			<a th:if="${comment.user.id == userId}" class="link button" id="edit-button" 
+			    th:href="@{'/article/'+ ${article.id} + '/details/edit/comment/' + ${comment.id}}">edit</a>
+			<a th:if="${comment.user.id == userId || author}" class="link button" id="delete-button" 
+		      th:href="@{'/delete/comment/' + ${comment.id} + '/' + ${article.id}}">delete</a>
+		    </div>
+		</div>
+	    </section>
 	</main>
 	<footer th:replace="fragments/template :: footer"></footer>
     </body>

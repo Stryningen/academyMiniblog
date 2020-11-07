@@ -13,16 +13,16 @@ public class Comment {
     @ManyToOne
     private Article article;
     private Timestamp createdDate;
-    private String comment;
+    private String commentBody;
 
     public Comment() {
     }
 
-    public Comment(User user, Article article, Timestamp createdDate, String comment) {
+    public Comment(User user, Article article, Timestamp createdDate, String commentBody) {
         this.user = user;
         this.article = article;
         this.createdDate = createdDate;
-        this.comment = comment;
+        this.commentBody = commentBody;
     }
 
     public Integer getId() {
@@ -57,11 +57,11 @@ public class Comment {
         this.createdDate = createdDate;
     }
 
-    public String getComment() {
-        return comment;
+    public String getCommentBody() {
+        return commentBody;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setCommentBody(String commentBody) {
+        this.commentBody = commentBody;
     }
 }

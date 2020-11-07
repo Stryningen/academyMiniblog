@@ -26,3 +26,54 @@
     margin-top: 1em;
 }
 
+#comments{
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+   
+}
+
+#comment-form{
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+}
+
+#comment-form > *{
+    margin: 0.5em 0;
+}
+#new-comment{
+    width: 100%;
+}
+
+#comments > h3{
+    margin: 1em 0;
+    width: 100%;
+}
+
+.comment{
+    margin: 0.5em 0;
+    padding: 0.5em;
+    border: solid black 1px;
+    border-radius: 5px;
+    width: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.comment > div{
+    display: flex;
+}
+
+#timestamp{
+    margin-left: auto;
+}
+
+.comment > p{
+    margin: 0.5em 0;
+}
+
+#edit-button, #delete-button{
+    display: inline-block;
+    margin: 1em auto;
+}
