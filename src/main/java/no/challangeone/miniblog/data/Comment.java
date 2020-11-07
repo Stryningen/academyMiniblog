@@ -1,6 +1,7 @@
 package no.challangeone.miniblog.data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.sql.Timestamp;
 
 @Entity
@@ -13,6 +14,7 @@ public class Comment {
     @ManyToOne
     private Article article;
     private Timestamp createdDate;
+    @NotEmpty
     private String commentBody;
 
     public Comment() {

@@ -76,18 +76,19 @@ public class MiniblogController {
     @GetMapping(value = {"/article/{articleId}/details",
             "/article/{articleId}/details/edit/comment/{commentId}"})
     public String articleDetails(Model model, @PathVariable Integer articleId,
-                                 Principal principal, @PathVariable(required = false) Integer commentId
+                                 Principal principal, @PathVariable(required = false) Integer commentId,
+                                 @ModelAttribute Comment newComment, BindingResult br
     ) {
         if (checkIfLoggedIn(model, principal)) {
             User user = dataService.findUserByName(principal.getName());
             model.addAttribute("userId", user.getId());
         }
 
-        Comment newComment = new Comment();
+        Comment comment = new Comment();
         if (commentId != null){
-            newComment = dataService.findCommentById(commentId);
+            comment = dataService.findCommentById(commentId);
         }
-        model.addAttribute("newComment", newComment);
+        model.addAttribute("newComment", comment);
 
         Article article = dataService.findArticleById(articleId);
         checkIfAuthor(model, principal, article);
@@ -157,7 +158,7 @@ public class MiniblogController {
     }
 
     @PostMapping("/postComment/{articleId}")
-    public String postComment(@PathVariable Integer articleId, @ModelAttribute Comment newComment, BindingResult br,
+    public String postComment(@PathVariable Integer articleId, @Valid @ModelAttribute Comment newComment, BindingResult br,
                               Principal principal
                               ){
         if(br.hasErrors()){
