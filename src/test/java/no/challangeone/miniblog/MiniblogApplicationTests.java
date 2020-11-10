@@ -1,5 +1,6 @@
 package no.challangeone.miniblog;
 
+import com.github.javafaker.Faker;
 import no.challangeone.miniblog.data.Article;
 import no.challangeone.miniblog.data.AuthorArticle;
 import no.challangeone.miniblog.data.Comment;
@@ -23,6 +24,7 @@ class MiniblogApplicationTests {
     private DataService dataService;
     @Autowired
     private DataHandler dataHandler;
+    @Autowired
 
     @Test
     void contextLoads() {
@@ -64,6 +66,7 @@ class MiniblogApplicationTests {
         }
         Timestamp now = dataHandler.timestampNow();
         article = new Article("test_article", now);
+        article.setArticleBody("testing purposes");
         dataService.saveArticle(article);
 
         Article articleToCheck = dataService.findArticleByArticleName("test_article");
@@ -98,6 +101,7 @@ class MiniblogApplicationTests {
                 dataService.deleteArticle(article);
             }
             listOfArticles.add(new Article("test_article_"+i, dataHandler.addDays(now, -i)));
+            listOfArticles.get(i-1).setArticleBody("test");
             dataService.saveArticle(listOfArticles.get(i-1));
             dataService.saveAuthorArticle(new AuthorArticle(listOfUsers.get(0), listOfArticles.get(i-1)));
         }
@@ -154,6 +158,7 @@ class MiniblogApplicationTests {
                 dataService.deleteArticle(article);
             }
             listOfArticles.add(new Article("test_article_"+i, dataHandler.addDays(now, -i)));
+            listOfArticles.get(i-1).setArticleBody("test");
             dataService.saveArticle(listOfArticles.get(i-1));
             dataService.saveAuthorArticle(new AuthorArticle(listOfUsers.get(0), listOfArticles.get(i-1)));
         }
