@@ -6,7 +6,10 @@
 }
 
 header{
+    position: fixed;
+    top: 0;
     height: 10vh;
+    transition: height 0.75s;
     background-color: dodgerblue;
     width: 100%;
     display: flex;
@@ -15,9 +18,9 @@ header{
 
 }
 
-.sticky{
-    position: fixed;
-    top: 0;
+header.sticky{
+    height: 5vh;
+    transition: height 0.75s;
 }
 
 .header-link{
@@ -31,6 +34,7 @@ header{
 }
 
 main{
+    margin-top: 10vh;
     min-height: 90vh;
     max-width: 100vw;
     padding: 1em 10vw;
