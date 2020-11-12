@@ -151,7 +151,7 @@ public class MiniblogController {
         return "redirect:/article/" + article.getId() + "/details";
     }
 
-    @GetMapping("/delete/article/{articleId}")
+    @PostMapping("/delete/article/{articleId}")
     public String deleteArticle(@PathVariable Integer articleId) {
         dataService.deleteArticle(dataService.findArticleById(articleId));
         return "redirect:/";
@@ -173,7 +173,7 @@ public class MiniblogController {
         return "redirect:/article/"+articleId+"/details";
     }
 
-    @GetMapping("/delete/comment/{commentId}/{articleId}")
+    @PostMapping("/delete/comment/{commentId}/{articleId}")
     public String deleteComment(@PathVariable Integer commentId, @PathVariable Integer articleId){
         Comment comment = dataService.findCommentById(commentId);
         dataService.deleteComment(comment);

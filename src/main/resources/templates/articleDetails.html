@@ -7,12 +7,13 @@
     </head>
     <body>
 	<header th:replace="fragments/template :: header"></header>
+	<form th:if="${author}" th:action="@{'/delete/article/' + ${article.id}}" method="post" id="delete-article-form">
+	</form>
 	<main>
-	    <form th:if="${author}" th:action="@{'/delete/article/' + ${article.id}}" id="edit-form">
-		<input type="submit" class="button" value="delete">
-		<a th:href="@{'/editArticle/' + ${article.id}}" class="link button">edit</a>
-	    </form>
-	    <button id="test" value="test">Test</button>
+	    <div th:if="${author}" id="edit-form">
+		<input id="delete-article" type="button" class="button" value="Delete">
+		<a th:href="@{'/editArticle/' + ${article.id}}" class="link button">Edit</a>
+	    </div>
 	    <h1 th:text="${article.articleName}">Article name</h1>
 	    <section id="article-authors">
 		<h3>Authers:</h3>
@@ -30,21 +31,24 @@
 		    <input class="button" type="submit" value="Post Comment">
 		    <input type="hidden" th:field=*{id}>
 		</form>
-		<div th:each="comment : ${comments}" class="comment">
+		<div th:each="comment : ${comments}" class="comment comment-item">
 		    <div>
 			<span th:text="${comment.user.userName}">Name of commentor</span>
 			<span th:text="${comment.createdDate}" id="timestamp">Timestamp</span>
 		    </div>
 		    <p th:text="${comment.commentBody}">comment</p>
-		    <div>
-			<a th:if="${comment.user.id == userId}" class="link button" id="edit-button" 
-			    th:href="@{'/article/'+ ${article.id} + '/details/edit/comment/' + ${comment.id}}">edit</a>
-			<a th:if="${comment.user.id == userId || author}" class="link button" id="delete-button" 
-		      th:href="@{'/delete/comment/' + ${comment.id} + '/' + ${article.id}}">delete</a>
+		    <div class="comment-edit-item" th:if="${comment.user.id == userId || author}">
+			<a th:if="${comment.user.id == userId}" class="link button edit-comment-button" 
+								th:href="@{'/article/'+ ${article.id} + '/details/edit/comment/' + ${comment.id}}">Edit</a>
+			<input type="button" th:if="${comment.user.id == userId || author}" class="button delete-comment-button" 
+											    th:href="@{'/delete/comment/' + ${comment.id} + '/' + ${article.id}}" value="Delete">
+			<form th:if="${comment.user.id == userId || author}" id="delete-comment-form" method="post" th:action="@{'/delete/comment/' + ${comment.id} + '/' + ${article.id}}">
+			</form>
 		    </div>
 		</div>
 	    </section>
 	</main>
+	<script th:src="@{/js/confirmationPopUp.js}"></script>
 	<footer th:replace="fragments/template :: footer"></footer>
     </body>
 </html>
